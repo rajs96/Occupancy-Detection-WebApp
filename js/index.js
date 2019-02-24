@@ -8,22 +8,21 @@ $("#predict").click((e) => {
         data: JSON.stringify(
             {temperature: $("#temperature").val(),
             humidity: $("#humidity").val(),
-            C02: $("#C02").val(),
             light:$("#light").val(),
+            C02: $("#C02").val(),
             humidity_ratio:$("#humidity_ratio").val()
     }
         ),
-        success: (data)=>{
-            console.log(data)
-        },
+
         statusCode: {
             201: (data) => {
-                console.log("post request successful")
+                console.log("post request successful");
+                location = '/displayPrediction/' + data;
             },
         },
         error:(err)=> {
-            console.log(err)
-            console.log("error doing post request")
+            console.log(err);
+            console.log("error doing post request");
         }
     })
 });

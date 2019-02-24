@@ -1,5 +1,5 @@
 # import necessary modules
-from flask import Flask, render_template, request, Response,json,jsonify
+from flask import Flask, render_template, request, Response,json,jsonify,redirect,url_for
 import numpy as np
 
 # initialize application
@@ -10,14 +10,12 @@ from keras.models import load_model
 model = load_model('model.h5')
 model._make_predict_function()
 
+
 # import scaler for particular training data
 from scaleData import scale_data
-# define the route for the index page
-@app.route('/')
-def index():
-    return render_template('index.html')
 
-@app.route('/predict',methods=['POST'])
+
+@app.route('/predict',methods=['GET','POST'])
 def predict():
     # get the data from the fields on the front end
     # as json
@@ -28,8 +26,8 @@ def predict():
     X = np.array(
       [[float(jsonData['temperature']),
       float(jsonData['humidity']),
-      float(jsonData['C02']),
       float(jsonData['light']),
+      float(jsonData['C02']),
       float(jsonData['humidity_ratio'])]])
     
     # get the particular scaler for the dataset
@@ -39,9 +37,22 @@ def predict():
     X = scaler.transform(X)
     
     # make the prediction based on our loaded model
-    print(model.predict(X))
-    return custom_response(jsonData,201)
+    prediction = model.predict(X)
 
+    print(prediction)
+
+    # return redirect
+    return Response(str(prediction[0,1]),201)
+
+@app.route('/displayPrediction/<prob_occupied>',methods=['GET'])
+def displayPrediction(prob_occupied):
+  print("got here")
+  return render_template('prediction.html',prediction=prob_occupied)
+
+# define the route for the index page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 def custom_response(res, status_code):
   """
