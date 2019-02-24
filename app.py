@@ -1,5 +1,12 @@
+# import necessary modules
 from flask import Flask, render_template, request, Response,json,jsonify
+
+# initialize application
 app = Flask(__name__,static_folder='js')
+
+# load keras model
+from keras.models import load_model
+model = load_model('model.h5')
 
 # define the route for the index page
 @app.route('/')
