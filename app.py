@@ -8,6 +8,7 @@ app = Flask(__name__,static_folder='js')
 # load keras model
 from keras.models import load_model
 model = load_model('model.h5')
+model._make_predict_function()
 
 # import scaler for particular training data
 from scaleData import scale_data
@@ -33,9 +34,12 @@ def predict():
     
     # get the particular scaler for the dataset
     scaler = scale_data()
+
+    # scale the data
     X = scaler.transform(X)
-    print(X)
     
+    # make the prediction based on our loaded model
+    print(model.predict(X))
     return custom_response(jsonData,201)
 
 
