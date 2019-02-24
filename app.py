@@ -9,6 +9,8 @@ app = Flask(__name__,static_folder='js')
 from keras.models import load_model
 model = load_model('model.h5')
 
+# import scaler for particular training data
+from scaleData import scale_data
 # define the route for the index page
 @app.route('/')
 def index():
@@ -16,15 +18,24 @@ def index():
 
 @app.route('/predict',methods=['POST'])
 def predict():
+    # get the data from the fields on the front end
+    # as json
     jsonData = request.get_json()
+
+    # turn it in to a numpy array so
+    # we can feed it into our model
     X = np.array(
       [[float(jsonData['temperature']),
       float(jsonData['humidity']),
       float(jsonData['C02']),
       float(jsonData['light']),
       float(jsonData['humidity_ratio'])]])
+    
+    # get the particular scaler for the dataset
+    scaler = scale_data()
+    X = scaler.transform(X)
     print(X)
-    print(X.shape)
+    
     return custom_response(jsonData,201)
 
 
