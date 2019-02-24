@@ -1,5 +1,6 @@
 # import necessary modules
 from flask import Flask, render_template, request, Response,json,jsonify
+import numpy as np
 
 # initialize application
 app = Flask(__name__,static_folder='js')
@@ -13,13 +14,19 @@ model = load_model('model.h5')
 def index():
     return render_template('index.html')
 
-@app.route('/test',methods=['GET','POST'])
-def test():
+@app.route('/predict',methods=['POST'])
+def predict():
     jsonData = request.get_json()
-    print(jsonData)
+    X = np.array(
+      [[float(jsonData['temperature']),
+      float(jsonData['humidity']),
+      float(jsonData['C02']),
+      float(jsonData['light']),
+      float(jsonData['humidity_ratio'])]])
+    print(X)
+    print(X.shape)
     return custom_response(jsonData,201)
 
-#@app.route('/predict/',methods=['POST']
 
 def custom_response(res, status_code):
   """

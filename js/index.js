@@ -2,13 +2,14 @@ $("#predict").click((e) => {
     e.preventDefault();
     $.ajax({
         type:'POST',
-        url:'/test',
+        url:'/predict',
         contentType:'application/json',
         dataType:'json',
         data: JSON.stringify(
             {temperature: $("#temperature").val(),
             humidity: $("#humidity").val(),
             C02: $("#C02").val(),
+            light:$("#light").val(),
             humidity_ratio:$("#humidity_ratio").val()
     }
         ),
