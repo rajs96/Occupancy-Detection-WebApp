@@ -1,4 +1,6 @@
 Flask
 keras
 numpy
+pandas
 sklearn
+tensorflow

@@ -69,4 +69,4 @@ def custom_response(res, status_code):
 
 # run the app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
